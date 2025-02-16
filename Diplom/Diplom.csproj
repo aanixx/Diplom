@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
+    <ProjectReference Include="..\ShafaStoreDbTables\ShafaStoreDbTables.csproj" />
   </ItemGroup>
 
 </Project>
