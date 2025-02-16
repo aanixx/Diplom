@@ -1,9 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35521.163 d17.12
+VisualStudioVersion = 17.12.35521.163
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Diplom", "Diplom\Diplom.csproj", "{A53AC1E4-ED8A-4763-B9E5-E943CA28F36A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6A8E4F58-50A2-46F0-ACC5-25521C706A64} = {6A8E4F58-50A2-46F0-ACC5-25521C706A64}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShafaStoreDbTables", "ShafaStoreDbTables\ShafaStoreDbTables.csproj", "{6A8E4F58-50A2-46F0-ACC5-25521C706A64}"
 EndProject
