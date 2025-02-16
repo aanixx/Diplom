@@ -5,6 +5,8 @@ VisualStudioVersion = 17.12.35521.163 d17.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Diplom", "Diplom\Diplom.csproj", "{A53AC1E4-ED8A-4763-B9E5-E943CA28F36A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShafaStoreDbTables", "ShafaStoreDbTables\ShafaStoreDbTables.csproj", "{6A8E4F58-50A2-46F0-ACC5-25521C706A64}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{A53AC1E4-ED8A-4763-B9E5-E943CA28F36A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A53AC1E4-ED8A-4763-B9E5-E943CA28F36A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A53AC1E4-ED8A-4763-B9E5-E943CA28F36A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A8E4F58-50A2-46F0-ACC5-25521C706A64}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A8E4F58-50A2-46F0-ACC5-25521C706A64}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A8E4F58-50A2-46F0-ACC5-25521C706A64}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A8E4F58-50A2-46F0-ACC5-25521C706A64}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
