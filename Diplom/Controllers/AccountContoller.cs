@@ -4,7 +4,11 @@ namespace Diplom.Controllers
 {
     public class AccountContoller : Controller
     {
-        public IActionResult Index()
+
+
+
+        [HttpGet]
+        public IActionResult Registration()
         {
             return View();
         }
