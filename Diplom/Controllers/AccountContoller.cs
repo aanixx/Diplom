@@ -6,7 +6,6 @@ namespace Diplom.Controllers
     {
 
 
-
         [HttpGet]
         public IActionResult Registration()
         {
