@@ -6,29 +6,33 @@ using Diplom.Data.IdentityContext;
 
 namespace Diplom.Controllers
 {
-    public class AccountContoller : Controller
+    public class AccountController : Controller
     {
         SingleUser? user;
         UserManager<SingleUser>? _userManager;
 
-        public AccountContoller(UserManager<SingleUser>? userManager)
+        public AccountController(UserManager<SingleUser>? userManager)
         {
             _userManager = userManager;
         }
      
         [HttpGet]
+        [Route("Account/Registration")]
         public IActionResult Registration()
         {
             return View();
         }
 
         [HttpPost]
+        [Route("Account/Registration")]
         public async Task<IActionResult> Registration(RegViewModel? rgModel)
         {
             if (ModelState.IsValid)
             {
-                if (rgModel != null)
+                if (_userManager != null && rgModel.Email != null)
                 {
+                    if (rgModel != null)
+                    {
                         user = await _userManager.FindByEmailAsync(rgModel.Email);
 
                         if (user == null)
@@ -47,6 +51,7 @@ namespace Diplom.Controllers
                             return RedirectToAction("UserExists", "Account");
                         }
                     }
+                }
             }
 
             return RedirectToAction("Registration", "Account");

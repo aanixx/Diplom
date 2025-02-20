@@ -2,16 +2,24 @@ using Diplom.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using System.IO;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Diplom.Data.IdentityContext;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
-string? path = builder.Configuration.GetConnectionString("ShafaStore");
+builder.Services.AddIdentity<SingleUser, IdentityRole>()
+    .AddEntityFrameworkStores<IdentityContext>()
+    .AddDefaultTokenProviders();
 
 
-if (path != null)
+
+string? connectionString = builder.Configuration.GetConnectionString("ShafaStore");
+
+if (!string.IsNullOrEmpty(connectionString))
 {
-    builder.Services.AddDbContext<ShafaStoreDBContext>(str => str.UseSqlServer(path));
+    builder.Services.AddDbContext<IdentityContext>(options =>
+        options.UseSqlServer(connectionString));
 }
 
 
