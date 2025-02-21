@@ -20,3 +20,26 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.search-btn {
+    border: 0;
+    fill: #7d7d7d
+}
+
+.btn-link {
+    color: #333;
+    text-decoration: none;
+}
+
+.container-fluid {
+    display: flex;
+    justify-content: center;
+}
+
+.btn-add-product {
+    background-color: transparent;
+    border-radius: 8px;
+    border: 1px solid #414141;
+    color: #414141;
+    height: 40px;
+}

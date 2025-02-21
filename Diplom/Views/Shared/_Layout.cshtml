@@ -10,23 +10,46 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-toggleable-sm navbar-light bg-dark border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-
-                <div class="d-flex align-items-center px-3">
-                    <button class="navbar-toggler mx-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar" aria-label="Toggle navigation">
+        <nav class="navbar navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3" style="background-color: #eee">
+            <div class="container-fluid justify-content-center">
+                <div class="d-flex align-items-center gap-4">
+                    <!--<button class="navbar-toggler mx-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
-                    </button>
-
-                    <a class="navbar-brand mx-3" asp-area="" asp-controller="Home" asp-action="Index">SHAFA</a>
-                    <a asp-controller="Account" asp-action="Registration" class="btn btn-sm btn-outline-success mx-2">Registration</a>
-
+                    </button>-->
+                    <a class="navbar-brand mx-3" asp-area="" asp-controller="Home" asp-action="Index">
+                        <!-- ЗАМЕНИТЬ -->
+                        <img src="https://uploads.shafastatic.net/uploads/2022/Jul/ic_shafa_logo_zDK2Rl4.svg" alt="shafa_logo" title="shafa_logo" width="130" height="36">
+                        <!-- ЗАМЕНИТЬ -->
+                    </a>
+                    <div>
+                        <form>
+                            <div class="input-group">
+                                <select class="form-select" style="max-width: 150px;">
+                                    <option selected>Всі категорії</option>
+                                    <option value="1">Category 1</option>
+                                    <option value="2">Category 2</option>
+                                    <option value="3">Category 3</option>
+                                </select>
+                                <input type="text" class="form-control" placeholder="Я хочу купити на SHAFA ...">
+                                <button class="search-btn" type="submit">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="bi bi-search" viewBox="0 0 16 16">
+                                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    <button type="button" class="btn-add-product ">Додати товар</button>
+                    <section>
+                        <a asp-controller="Account" asp-action="Authentification" class="btn btn-link p-0">Вхід</a>
+                        <span>|</span>
+                        <a asp-controller="Account" asp-action="Registration" class="btn btn-link p-0">Реєстрація</a>
+                    </section>
                 </div>
-
+                
                 <a class="btn btn-sm" asp-controller="Carts" asp-action="Index" asp-route-returnUrl="@(Context.Request.Path+Context.Request.QueryString.Value)">
                     <i class="bi bi-bag-check mx-4" style="font-size: 1.7rem;"></i>
                 </a>
-
                 <div class="offcanvas offcanvas-end text-bg-dark" data-bs-backdrop="static" tabindex="-1" id="offcanvasDarkNavbar" aria-labelledby="offcanvasDarkNavbarLabel">
                     <div class="offcanvas-header align-items-baseline">
                         @if (User.Identity != null)
@@ -38,19 +61,14 @@
                                 </div>
                             }
                         }
-
                         <button type="button" class="btn-close btn-close-white px-2" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                     </div>
-
                     <div class="offcanvas-body">
-
                         <ul class="navbar-nav justify-content-end flex-grow-1 pe-3"> 
-
                             <li class="nav-item dropdown"> 
                                <button class="nav-link dropdown-toggle active" data-bs-toggle="dropdown" aria-expanded="false"> 
                                      Dropdown 
                                  </button> 
-
                                  <ul class="dropdown-menu dropdown-menu-dark"> 
                                      <li><a class="dropdown-item" asp-controller="Store" asp-action="Products" asp-route-pr="1">Trousers</a></li> 
                                      <li> 
@@ -72,8 +90,6 @@
                                  </ul> 
                              </li>
                             </ul>
-
-
                         @if (User.Identity != null)
                         {
                             @if (User.Identity.IsAuthenticated)
@@ -92,14 +108,12 @@
                                 </div>
                             }
                         }
-
                     </div>
                 </div>
-
             </div>
-
         </nav>
     </header>
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
