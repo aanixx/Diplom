@@ -13,7 +13,6 @@ builder.Services.AddIdentity<SingleUser, IdentityRole>()
     .AddDefaultTokenProviders();
 
 
-
 string? connectionString = builder.Configuration.GetConnectionString("ShafaStore");
 
 if (!string.IsNullOrEmpty(connectionString))
@@ -21,8 +20,6 @@ if (!string.IsNullOrEmpty(connectionString))
     builder.Services.AddDbContext<IdentityContext>(options =>
         options.UseSqlServer(connectionString));
 }
-
-
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpContextAccessor();

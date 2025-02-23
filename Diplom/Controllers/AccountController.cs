@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ShafaStoreDbTables;
 using Diplom.Data.IdentityContext;
+using Microsoft.Data.SqlClient;
 
 namespace Diplom.Controllers
 {
@@ -27,6 +28,20 @@ namespace Diplom.Controllers
         [Route("Account/Registration")]
         public async Task<IActionResult> Registration(RegViewModel? rgModel)
         {
+            try
+            {
+                using (var connection = new SqlConnection("ваш_рядок_підключення"))
+                {
+                    await connection.OpenAsync();
+                    Console.WriteLine("Підключення успішне!");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Помилка підключення: {ex.Message}");
+            }
+
+
             if (ModelState.IsValid)
             {
                 if (_userManager != null && rgModel.Email != null)
