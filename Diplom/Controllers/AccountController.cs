@@ -1,7 +1,6 @@
 ﻿using Diplom.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using ShafaStoreDbTables;
 using Diplom.Data.IdentityContext;
 using Microsoft.Data.SqlClient;
 
@@ -28,19 +27,6 @@ namespace Diplom.Controllers
         [Route("Account/Registration")]
         public async Task<IActionResult> Registration(RegViewModel? rgModel)
         {
-            try
-            {
-                using (var connection = new SqlConnection("ваш_рядок_підключення"))
-                {
-                    await connection.OpenAsync();
-                    Console.WriteLine("Підключення успішне!");
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Помилка підключення: {ex.Message}");
-            }
-
 
             if (ModelState.IsValid)
             {
@@ -53,12 +39,32 @@ namespace Diplom.Controllers
                         if (user == null)
                         {
                             user = new SingleUser();
+                            user.UserName = rgModel.UserName;
                             user.Login = rgModel.Login;
                             user.Email = rgModel.Email;
+                            user.PhoneNumber = rgModel.PhoneNumber;
+                            user.PasswordHash = rgModel.Password;
 
                             if (rgModel.Password != null && _userManager != null)
                             {
                                 IdentityResult res = await _userManager.CreateAsync(user, rgModel.Password);
+
+                                if (res.Succeeded)
+                                {
+                                    if (_userManager != null)
+                                    {
+                                        return RedirectToAction("Index", "Home");
+                                    }
+                                    else
+                                    {
+                                        foreach (var item in res.Errors)
+                                        {
+                                            ModelState.AddModelError(string.Empty, item.Description);
+                                        }
+                                    }
+
+                                    return View(rgModel);
+                                }
                             }
                         }
                         else

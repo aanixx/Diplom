@@ -19,6 +19,12 @@
             </div>
 
             <div class="mb-3">
+                <span class="text-danger" asp-validation-for="UserName"></span>
+                <label for="UserName" class="form-label">Name:</label>
+                <input type="text" name="UserName" id="UserName" class="form-control" />
+            </div>
+
+            <div class="mb-3">
                 <span class="text-danger" asp-validation-for="Login"></span>
                 <label for="Login" class="form-label">Login</label>
                 <input type="text" name="Login" id="Login" class="form-control" />

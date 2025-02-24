@@ -5,6 +5,8 @@ namespace Diplom.Models
     public class RegViewModel
     {
         [Required]
+        public string? UserName { get; set; }
+        [Required]
         public string? Login { get; set; }
 
         [Required]
