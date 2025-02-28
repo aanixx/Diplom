@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="dark">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -40,86 +40,45 @@
                         </form>
                     </div>
                     <button type="button" class="btn-add-product ">Додати товар</button>
-                    <section>
-                        <a asp-controller="Account" asp-action="Authentification" class="btn btn-link p-0">Вхід</a>
-                        <span>|</span>
-                        <a asp-controller="Account" asp-action="Registration" class="btn btn-link p-0">Реєстрація</a>
-                    </section>
                 </div>
-                
-                <a class="btn btn-sm" asp-controller="Carts" asp-action="Index" asp-route-returnUrl="@(Context.Request.Path+Context.Request.QueryString.Value)">
-                    <i class="bi bi-bag-check mx-4" style="font-size: 1.7rem;"></i>
-                </a>
-                <div class="offcanvas offcanvas-end text-bg-dark" data-bs-backdrop="static" tabindex="-1" id="offcanvasDarkNavbar" aria-labelledby="offcanvasDarkNavbarLabel">
-                    <div class="offcanvas-header align-items-baseline">
-                        @if (User.Identity != null)
-                        {
-                            @if (User.Identity.IsAuthenticated)
-                            {
-                                <div class="d-flex my-3 mx-2">
-                                    <div class="lh-lg fw-semibold">@User.Identity.Name</div>
-                                </div>
-                            }
-                        }
-                        <button type="button" class="btn-close btn-close-white px-2" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                    </div>
-                    <div class="offcanvas-body">
-                        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3"> 
-                            <li class="nav-item dropdown"> 
-                               <button class="nav-link dropdown-toggle active" data-bs-toggle="dropdown" aria-expanded="false"> 
-                                     Dropdown 
-                                 </button> 
-                                 <ul class="dropdown-menu dropdown-menu-dark"> 
-                                     <li><a class="dropdown-item" asp-controller="Store" asp-action="Products" asp-route-pr="1">Trousers</a></li> 
-                                     <li> 
-                                         <hr class="dropdown-divider"> 
-                                     </li> 
-                                     <li><a class="dropdown-item" asp-controller="Store" asp-action="Products" asp-route-pr="2">Sweatshirts</a></li> 
-                                     <li> 
-                                         <hr class="dropdown-divider"> 
-                                     </li> 
-                                     <li><a class="dropdown-item" asp-controller="Store" asp-action="Products" asp-route-pr="3">Skirts</a></li> 
-                                     <li> 
-                                         <hr class="dropdown-divider"> 
-                                     </li> 
-                                     <li><a class="dropdown-item" asp-controller="Store" asp-action="Products" asp-route-pr="4">Shorts</a></li> 
-                                     <li> 
-                                         <hr class="dropdown-divider"> 
-                                     </li> 
-                                     <li><a class="dropdown-item" asp-controller="Store" asp-action="Products" asp-route-pr="5">T-shirts</a></li> 
-                                 </ul> 
-                             </li>
+                <div class="container">
+                    <nav class="navbar navbar-expand-lg">
+                        <div class="container-fluid">
+                            <ul class="navbar-nav ms-auto">
+                                @if (User.Identity != null && User.Identity.IsAuthenticated)
+                                {
+                                    <!-- Если пользователь авторизован -->
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            @User.Identity.Name
+                                        </a>
+                                        <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                                            <li><a class="dropdown-item" href="/Account/Profile">Профіль</a></li>
+                                            <li><a class="dropdown-item" href="/Account/Logout">Вихід</a></li>
+                                        </ul>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <!-- Если пользователь НЕ авторизован -->
+                                    <a asp-controller="Account" asp-action="Login" class="nav-link">Вхід  |</a>
+                                    <a asp-controller="Account" asp-action="Registration" class="nav-link">Реєстрація</a>
+                                }
                             </ul>
-                        @if (User.Identity != null)
-                        {
-                            @if (User.Identity.IsAuthenticated)
-                            {
-                                <div class="d-flex justify-content-end align-content-center my-3">
-                                    <form method="post" asp-controller="Account" asp-action="Logout">
-                                        <input type="submit" value="Logout" class="btn btn-sm btn-outline-danger mx-2" />
-                                    </form>
-                                </div>
-                            }
-                            else
-                            {
-                                <div class="d-flex justify-content-end my-3">
-                                    <a asp-controller="Account" asp-action="Login" class="btn btn-sm btn-outline-success mx-1">Login</a>
-                                    <a asp-controller="Account" asp-action="Registration" class="btn btn-sm btn-outline-success mx-2">Registration</a>
-                                </div>
-                            }
-                        }
-                    </div>
+                        </div>
+                    </nav>
                 </div>
             </div>
         </nav>
     </header>
-
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
-
+    <main role="main" class="pb-3">
+        <div class="container">
+        @RenderBody()
+            
+        </div>
+    </main>
+   
+ 
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2025 - Diplom - <a asp-area="" asp-page="/Privacy">Privacy</a>
@@ -133,3 +92,9 @@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+
+@*<section> 
+                         <a asp-controller="Account" asp-action="Login" class="btn btn-link p-0">Вхід</a> 
+                         <span>|</span> 
+                         <a asp-controller="Account" asp-action="Registration" class="btn btn-link p-0">Реєстрація</a> 
+                     </section>*@

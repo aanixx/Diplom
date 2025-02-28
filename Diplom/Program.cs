@@ -4,14 +4,9 @@ using Microsoft.AspNetCore.Identity;
 using System.IO;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Diplom.Data.IdentityContext;
-
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
-
-builder.Services.AddIdentity<SingleUser, IdentityRole>()
-    .AddEntityFrameworkStores<IdentityContext>()
-    .AddDefaultTokenProviders();
-
 
 string? connectionString = builder.Configuration.GetConnectionString("ShafaStore");
 
@@ -20,10 +15,30 @@ if (!string.IsNullOrEmpty(connectionString))
     builder.Services.AddDbContext<IdentityContext>(options =>
         options.UseSqlServer(connectionString));
 }
+ 
 
-builder.Services.AddControllersWithViews();
+////--------------------------------------------------------------------------------////
+
+builder.Services.AddIdentity<SingleUser, IdentityRole>(ops =>
+{
+    // додавання підтримки кирилиці
+    ops.User.AllowedUserNameCharacters =
+    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+абвгдеёжзийклмнопрстуфхцчшщъыьэюяіїАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯІЇ";
+    // встановлення унікальності Email
+    ops.User.RequireUniqueEmail = true;
+
+}).AddEntityFrameworkStores<IdentityContext>().AddDefaultTokenProviders();
+
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // Час життя сесії
+    options.Cookie.HttpOnly = true;  // Захист від XSS
+    options.Cookie.IsEssential = true; // Необхідний для роботи
+});
+////--------------------------------------------------------------------------------////
+
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddSession();
+builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
@@ -40,10 +55,11 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseSession();
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");

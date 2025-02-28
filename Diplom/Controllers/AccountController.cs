@@ -3,19 +3,23 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Diplom.Data.IdentityContext;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
 
 namespace Diplom.Controllers
 {
     public class AccountController : Controller
     {
-        SingleUser? user;
         UserManager<SingleUser>? _userManager;
+        SignInManager<SingleUser>? _signInManager;
+        SingleUser? user;
 
-        public AccountController(UserManager<SingleUser>? userManager)
+        public AccountController(UserManager<SingleUser>? userManager, SignInManager<SingleUser>? signInManager)
         {
             _userManager = userManager;
+            _signInManager = signInManager;
         }
-     
+
         [HttpGet]
         [Route("Account/Registration")]
         public IActionResult Registration()
@@ -25,57 +29,111 @@ namespace Diplom.Controllers
 
         [HttpPost]
         [Route("Account/Registration")]
-        public async Task<IActionResult> Registration(RegViewModel? rgModel)
+        public async Task<IActionResult> Registration(RegViewModel rgModel)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(rgModel);
+            }
 
+            if (_userManager == null || _signInManager == null)
+            {
+                ModelState.AddModelError("", "Authentication service is unavailable.");
+                return View(rgModel);
+            }
+
+            var existingUser = await _userManager.FindByEmailAsync(rgModel.Email);
+            if (existingUser != null)
+            {
+                return RedirectToAction("UserExists", "Account");
+            }
+
+            var user = new SingleUser
+            {
+                UserName = rgModel.UserName,
+                Login = rgModel.Login,
+                Email = rgModel.Email,
+                PhoneNumber = rgModel.PhoneNumber
+            };
+
+            // Создаем пользователя (пароль хешируется автоматически)
+            var res = await _userManager.CreateAsync(user, rgModel.Password);
+            if (!res.Succeeded)
+            {
+                foreach (var item in res.Errors)
+                {
+                    ModelState.AddModelError("", item.Description);
+                }
+                return View(rgModel);
+            }
+
+            await _signInManager.SignInAsync(user, false);
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpGet]
+        public IActionResult Login(string returnUrl)
+        {
+            return View(new LoginViewModel { ReturnUrl = returnUrl });
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(LoginViewModel? login)
+        {
             if (ModelState.IsValid)
             {
-                if (_userManager != null && rgModel.Email != null)
+                if (_signInManager != null && login != null)
                 {
-                    if (rgModel != null)
+                    var res = await _signInManager.PasswordSignInAsync(login.UserName!, login.Password!, login.RememberMe, false);
+                    if (res.Succeeded)
                     {
-                        user = await _userManager.FindByEmailAsync(rgModel.Email);
-
-                        if (user == null)
+                        // Отримуємо користувача з БД
+                        var user = await _userManager.FindByNameAsync(login.UserName!);
+                        if (user != null)
                         {
-                            user = new SingleUser();
-                            user.UserName = rgModel.UserName;
-                            user.Login = rgModel.Login;
-                            user.Email = rgModel.Email;
-                            user.PhoneNumber = rgModel.PhoneNumber;
-                            user.PasswordHash = rgModel.Password;
+                            // Зберігаємо дані в сесії
+                            HttpContext.Session.SetString("UserId", user.Id);
+                            HttpContext.Session.SetString("Username", user.UserName!);
+                        }
 
-                            if (rgModel.Password != null && _userManager != null)
-                            {
-                                IdentityResult res = await _userManager.CreateAsync(user, rgModel.Password);
-
-                                if (res.Succeeded)
-                                {
-                                    if (_userManager != null)
-                                    {
-                                        return RedirectToAction("Index", "Home");
-                                    }
-                                    else
-                                    {
-                                        foreach (var item in res.Errors)
-                                        {
-                                            ModelState.AddModelError(string.Empty, item.Description);
-                                        }
-                                    }
-
-                                    return View(rgModel);
-                                }
-                            }
+                        if (login.ReturnUrl != null && Url.IsLocalUrl(login.ReturnUrl))
+                        {
+                            return Redirect(login.ReturnUrl);
                         }
                         else
                         {
-                            return RedirectToAction("UserExists", "Account");
+                            return RedirectToAction("Index", "Home");
                         }
                     }
                 }
+
+            }
+            else
+            {
+                ModelState.AddModelError("", "Wrong login or password");
             }
 
-            return RedirectToAction("Registration", "Account");
+
+
+            return View(login);
         }
+
+        // Метод виходу
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Logout()
+        {
+            if (_signInManager != null)
+            {
+                await _signInManager.SignOutAsync();
+                HttpContext.Session.Clear(); // Очищення всієї сесії
+            }
+
+            return RedirectToAction("Index", "Home");
+        }
+
     }
+
 }

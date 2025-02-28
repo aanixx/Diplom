@@ -1,0 +1,58 @@
+﻿@using Diplom.Models;
+@model LoginViewModel
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="container">
+
+    <div class="d-flex align-items-center justify-content-center LoginForm">
+
+        <div class="w-50 h-25 row">
+
+            <div class="col card px-3 py-1 shadow">
+
+                <div class="display-6 mb-3 text-center fw-semibold">Login</div>
+
+                <form method="post" asp-controller="Account" asp-action="Login" asp-route-returnUrl="@Model.ReturnUrl">
+                    <div asp-validation-summary="ModelOnly"></div>
+
+                    <div class="mb-3">
+                        <label class="form-label mx-2" for="UserName">User name</label>
+                        <input type="text" class="form-control shadow-sm" name="UserName" id="UserName" placeholder="Enter user name" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="Password" class="form-label mx-2">Password</label>
+                        <input type="password" name="Password" id="Password" class="shadow-sm form-control" placeholder="Enter password" />
+                    </div>
+
+                    <div class="mb-3 form-check form-switch">
+                        <input type="checkbox" role="checkbox" name="RememberMe" id="RememberMe" class="form-check-input shadow-sm" />
+                        <label for="RememberMe" class="form-check-label">Remember me</label>
+                    </div>
+
+
+                    <div class="mb-3 d-flex justify-content-end">
+                        <input type="submit" value="Login" class="btn btn-success px-4 mx-2" />
+                    </div>
+
+                </form>
+
+                <div class="d-flex m-3 p-2 align-items-center justify-content-center">
+                    <a asp-controller="Account" asp-action="GoogleLogin" class="mx-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Sign Google">
+                        <img src="~/img/google.png" alt="Google" class="BtnImg" />
+                    </a>
+                    <a asp-controller="Account" asp-action="FacebookLogin" class="mx-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Sign Facebook">
+                        <img src="~/img/facebook.png" alt="Facebook" class="BtnImg" />
+                    </a>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>
