@@ -5,6 +5,8 @@ using Diplom.Data.IdentityContext;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace Diplom.Controllers
 {
@@ -128,10 +130,86 @@ namespace Diplom.Controllers
             if (_signInManager != null)
             {
                 await _signInManager.SignOutAsync();
-                HttpContext.Session.Clear(); // Очищення всієї сесії
+                HttpContext.Session.Clear();
             }
 
             return RedirectToAction("Index", "Home");
+        }
+
+
+        [AllowAnonymous]
+        public IActionResult GoogleLogin()
+        {
+            string? returnUrl = Url.Action("GoogleResponse", "Account", new { returnUrl = "/" });
+            var properties = _signInManager?.ConfigureExternalAuthenticationProperties("Google", returnUrl);
+            if (properties == null)
+            {
+                Console.WriteLine("Properties are null");
+            }
+            Console.WriteLine("Redirecting to Google with returnUrl: " + returnUrl);
+            return new ChallengeResult("Google", properties);
+        }
+
+        [AllowAnonymous]
+        [Route("GoogleResponse")]
+        public async Task<IActionResult> GoogleResponse(string? returnUrl = "/")
+        {
+            if (_signInManager == null || _userManager == null)
+            {
+                return RedirectToAction("AccessDenied", "Account");
+            }
+
+            ExternalLoginInfo? info = await _signInManager.GetExternalLoginInfoAsync();
+            Console.WriteLine($"ExternalLoginInfo: {info}");
+            if (info == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            // Проверяем, есть ли пользователь с таким логином
+            var resLogin = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false);
+            if (resLogin.Succeeded)
+            {
+                return LocalRedirect(returnUrl!);
+            }
+
+            // Создаем пользователя, если его нет
+            string? email = info.Principal.FindFirstValue(ClaimTypes.Email);
+            string? userName = info.Principal.FindFirstValue(ClaimTypes.Surname) ?? info.Principal.FindFirstValue(ClaimTypes.GivenName);
+
+            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(userName))
+            {
+                Console.WriteLine("Email or username is null or empty");
+                return RedirectToAction("AccessDenied", "Account");
+            }
+
+            SingleUser? user = await _userManager.FindByEmailAsync(email);
+            IdentityResult? result = null;
+
+            if (user == null)
+            {
+                user = new SingleUser
+                {
+                    UserName = userName,
+                    Email = email
+                };
+
+                result = await _userManager.CreateAsync(user);
+            }
+
+            if (result == null || result.Succeeded)
+            {
+                await _userManager.AddLoginAsync(user, info);
+                await _signInManager.SignInAsync(user, isPersistent: false);
+                return LocalRedirect(returnUrl!);
+            }
+
+            return RedirectToAction("AccessDenied", "Account");
+        }
+
+        public IActionResult UserExists()
+        {
+            return View();
         }
 
     }
