@@ -1,0 +1,44 @@
+﻿@using Diplom.Models;
+@model PostFbGlViewModel;
+
+@{
+    ViewData["Title"] = "Google response";
+}
+
+<div class="container">
+
+    <div class="text-center m-3 display-6">Information about the User:</div>
+
+    <form method="post" asp-controller="Account" asp-action="PostFbGl" class="w-75 shadow p-4 m-auto">
+        <div asp-validation-summary="ModelOnly" class="mb-3"></div>
+
+        <div class="mb-3">
+            <span class="text-danger" asp-validation-for="UserName"></span>
+            <label for="UserName" class="form-label">User name</label>
+            <input type="text" name="UserName" id="UserName" class="form-control" value="@Model.UserName" />
+        </div>
+
+        <div class="mb-3 row">
+            <div class="col">
+                <label for="Login" class="form-label">Login:</label>
+                <input type="text" name="Login" id="Login" class="form-control" value="@Model.Login" />
+            </div>
+            <div class="col">
+                <label for="PhoneNumber" class="form-label">Phone number:</label>
+                <input type="text" name="PhoneNumber" id="PhoneNumber" class="form-control" value="@Model.PhoneNumber" />
+            </div>
+        </div>
+
+        <div class="col">
+            <span class="text-danger" asp-validation-for="Email"></span>
+            <label for="Email" class="form-label">Email address:</label>
+            <input type="text" name="Email" id="Email" class="form-control" value="@Model.Email" />
+        </div>
+
+        <div class="my-3 d-flex justify-content-end">
+            <input type="submit" value="Save" class="btn btn-success" />
+        </div>
+
+    </form>
+
+</div>
