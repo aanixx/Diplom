@@ -47,21 +47,24 @@
                             <ul class="navbar-nav ms-auto">
                                 @if (User.Identity != null && User.Identity.IsAuthenticated)
                                 {
-                                    <!-- Если пользователь авторизован -->
                                     <li class="nav-item dropdown">
                                         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             @User.Identity.Name
                                         </a>
-                                        <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                                             <li><a class="dropdown-item" href="/Account/Profile">Профіль</a></li>
-                                            <li><a class="dropdown-item" href="/Account/Logout">Вихід</a></li>
+                                            <li>
+                                                <form asp-controller="Account" asp-action="Logout" method="post">
+                                                    @Html.AntiForgeryToken()
+                                                    <button type="submit" class="dropdown-item">Вихід</button>
+                                                </form>
+                                            </li>
                                         </ul>
                                     </li>
                                 }
                                 else
                                 {
-                                    <!-- Если пользователь НЕ авторизован -->
-                                    <a asp-controller="Account" asp-action="Login" class="nav-link">Вхід  |</a>
+                                    <a asp-controller="Account" asp-action="Login" class="nav-link">Вхід |</a>
                                     <a asp-controller="Account" asp-action="Registration" class="nav-link">Реєстрація</a>
                                 }
                             </ul>

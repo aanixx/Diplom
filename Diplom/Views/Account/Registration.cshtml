@@ -5,7 +5,7 @@
 }
 
 <div class="container">
-    <div class="display-6 mb-3 text-center fw-semibold">Registration</div>
+    <div class="display-6 mb-3 text-center fw-semibold">Реєстрація</div>
 
     <div class="card shadow w-50 m-auto px-3 py-2">
 
@@ -14,49 +14,49 @@
 
             <div class="mb-3">
                 <span class="text-danger" asp-validation-for="PhoneNumber"></span>
-                <label for="PhoneNumber" class="form-label">Phone number:</label>
+                <label for="PhoneNumber" class="form-label">Номер телефону:</label>
                 <input type="text" name="PhoneNumber" id="PhoneNumber" class="form-control" />
             </div>
 
             <div class="mb-3">
                 <span class="text-danger" asp-validation-for="UserName"></span>
-                <label for="UserName" class="form-label">Name:</label>
+                <label for="UserName" class="form-label">Ім'я:</label>
                 <input type="text" name="UserName" id="UserName" class="form-control" />
             </div>
 
             <div class="mb-3">
                 <span class="text-danger" asp-validation-for="Login"></span>
-                <label for="Login" class="form-label">Login</label>
+                <label for="Login" class="form-label">Логін</label>
                 <input type="text" name="Login" id="Login" class="form-control" />
             </div>
 
             <div class="mb-3">
                 <span class="text-danger" asp-validation-for="Email"></span>
-                <label for="Email" class="form-label">Email address:</label>
+                <label for="Email" class="form-label">Електронна пошта:</label>
                 <input type="text" name="Email" id="Email" class="form-control" />
             </div>
 
             <div class="mb-3 row">
                 <div class="col">
-                    <label for="Password" class="form-label">Password:</label>
-                    <input type="password" name="Password" id="Password" class="form-control" />
                     <span class="text-danger" asp-validation-for="Password"></span>
+                    <label for="Password" class="form-label">Пароль:</label>
+                    <input type="password" name="Password" id="Password" class="form-control" />
                 </div>
 
                 <div class="col">
                     <span class="text-danger" asp-validation-for="ConfirmPassword"></span>
-                    <label for="ConfirmPassword" class="form-label">Confirm password:</label>
+                    <label for="ConfirmPassword" class="form-label">Підтвердіть пароль:</label>
                     <input type="password" name="ConfirmPassword" id="ConfirmPassword" class="form-control" />
                 </div>
 
             </div>
 
             <div class="mb-3 d-flex justify-content-end">
-                <input type="submit" value="Register" class="btn btn-success" />
+                <input type="submit" value="Реєструватись" class="btn btn-success" />
             </div>
             <div class="d-flex m-3 p-2 align-items-center justify-content-center">
                 <a asp-controller="Account" asp-action="GoogleLogin" class="mx-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Sign Google">
-                    <img src="~/img/google.png" alt="Google" class="BtnImg" />
+                    <img src="~/img/google.png" alt="Google" class="BtnImg" width="30" height="30"/>
                 </a>
             </div>
         </form>

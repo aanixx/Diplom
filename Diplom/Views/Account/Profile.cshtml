@@ -1,5 +1,30 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model Diplom.Data.IdentityContext.SingleUser
 @{
+    ViewData["Title"] = "Profile";
 }
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Профіль</title>
+</head>
+<body class="container" style="background-color: #eee">
+    <div class="card shadow w-50 m-auto px-3 py-2">
+        <div class="display-6 mb-3 text-center fw-semibold">Профіль</div>
+        <div class="card-body">
+            <img src="https://via.placeholder.com/120" class="rounded-circle mb-3" alt="Фото профиля">
+            <h5 class="card-title">@Model?.UserName</h5>
+            <p class="card-text text-muted">@Model?.Email</p>
+            <ul class="list-group list-group-flush text-start mb-3">
+                <li class="list-group-item"><strong>Имя:</strong> @Model?.UserName</li>
+                <li class="list-group-item"><strong>Логин:</strong> @Model?.Login</li>
+                <li class="list-group-item"><strong>Телефон:</strong> @Model?.PhoneNumber</li>
+                <li class="list-group-item"><strong>Email:</strong> @Model?.Email</li>
+            </ul>
+            <a href="/Account/EditProfile" class="btn btn-primary">Редактировать профиль</a>
+        </div>
+    </div>
+</body>
+</html>
+ 

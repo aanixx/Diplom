@@ -28,6 +28,17 @@ namespace Diplom.Controllers
         {
             return View();
         }
+        [HttpGet]
+        [Route("Account/Profile")]
+        public async Task<IActionResult> Profile()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return RedirectToAction("Login");
+            }
+            return View(user);
+        }
 
         [HttpPost]
         [Route("Account/Registration")]
@@ -117,11 +128,9 @@ namespace Diplom.Controllers
                 ModelState.AddModelError("", "Wrong login or password");
             }
 
-
-
             return View(login);
         }
-
+      
         // Метод виходу
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -207,6 +216,79 @@ namespace Diplom.Controllers
             return RedirectToAction("AccessDenied", "Account");
         }
 
+
+        [HttpGet]
+        public async Task<IActionResult> EditProfile()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return RedirectToAction("Login");
+            }
+
+            var model = new EditProfileViewModel
+            {
+                UserName = user.UserName,
+                Login = user.Login,
+                PhoneNumber = user.PhoneNumber,
+                Email = user.Email
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditProfile(EditProfileViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.GetUserAsync(User);
+                if (user == null)
+                {
+                    return RedirectToAction("Login");
+                }
+
+                // Изменяем через UserManager там, где требуется
+                var emailResult = await _userManager.SetEmailAsync(user, model.Email);
+                var phoneResult = await _userManager.SetPhoneNumberAsync(user, model.PhoneNumber);
+        
+
+                // Если все изменения успешно прошли
+                if (emailResult.Succeeded && phoneResult.Succeeded)
+                {
+                    user.Login = model.Login;
+                    user.UserName = model.UserName;
+                    var updateResult = await _userManager.UpdateAsync(user);
+
+                    if (updateResult.Succeeded)
+                    {
+                        await _signInManager.RefreshSignInAsync(user);
+                        return RedirectToAction("Profile");
+                    }
+                    foreach (var error in updateResult.Errors)
+                    {
+                        ModelState.AddModelError("", error.Description);
+                    }
+                }
+                else
+                {
+                    // Собираем ошибки с всех операций
+                    var allResults = new[] { emailResult, phoneResult };
+                    foreach (var result in allResults)
+                    {
+                        foreach (var error in result.Errors)
+                        {
+                            ModelState.AddModelError("", error.Description);
+                        }
+                    }
+                }
+            }
+
+            return View(model);
+        }
+
+        [Route("Account/UserExists")]
         public IActionResult UserExists()
         {
             return View();
